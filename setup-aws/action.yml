@@ -1,0 +1,54 @@
+name: "PrBob AWS Setup"
+description: "AWS login and optionally connect to codeartifact and/or ecr"
+
+inputs:
+  aws-access-key-id:
+    description: "AWS access key id"
+    required: true
+  aws-secret-access-key:
+    description: "AWS secret access key"
+    required: true
+  aws-region:
+    description: "AWS region"
+    required: true
+  codeartifact-login:
+    description: "Connect to codeartifact ?"
+    required: false
+    default: "0"
+  codeartifact-domain:
+    description: "Codeartifact domain"
+    required: false
+    default: ""
+  ecr-login:
+    description: "Connect to ecr ?"
+    required: false
+    default: "0"
+
+outputs:
+  npm-token:
+    description: "Codeartifact token"
+    value: ${{steps.codeartifact.outputs.TOKEN}}
+
+runs:
+  using: composite
+  steps:
+    - name: AWS login
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: ${{ inputs.aws-region }}
+
+    - name: Codeartifact connect
+      id: codeartifact
+      if: ${{inputs.codeartifact-login > 0}}
+      shell: bash
+      run: |
+        export TOKEN=`aws codeartifact get-authorization-token --domain ${{inputs.codeartifact-domain}} --query authorizationToken --output text`
+
+        echo "::set-output name=TOKEN::${TOKEN}"
+
+    - name: ECR connect
+      id: ecr
+      if: ${{inputs.ecr-login > 0}}
+      uses: aws-actions/amazon-ecr-login@v1
