@@ -1,0 +1,46 @@
+name: "Setup Node and Yarn"
+description: "Setup node, prepare local yarn with codeartifact registry and install dependencies"
+
+inputs:
+  registry-url:
+    description: "Url of the yarn registry"
+    required: false
+    default: ""
+  registry-token:
+    description: "Registry Token"
+    required: false
+    default: ""
+  install-deps:
+    description: "Install dependencies (no / install / prod) ? [default install]"
+    required: false
+    default: "install"
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: lts/*
+
+    - name: Activate Yarn
+      shell: bash
+      run: |
+        corepack enable
+
+    - name: Configure registry
+      if: ${{inputs.registry-url != '' && inputs.registry-token != ''}}
+      shell: bash
+      run: |
+        yarn config set "npmRegistries[${{inputs.registry-url}}].npmAlwaysAuth" true
+        yarn config set "npmRegistries[${{inputs.registry-url}}].npmAuthToken" ${{inputs.registry-token}}
+
+    - name: Install dependencies (prod only)
+      if: ${{inputs.install-deps == 'prod'}}
+      shell: bash
+      run: yarn workspaces focus --production
+
+    - name: Install dependencies (prod only)
+      if: ${{inputs.install-deps == 'install'}}
+      shell: bash
+      run: yarn install --immutable
