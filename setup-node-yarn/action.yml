@@ -32,8 +32,8 @@ runs:
       if: ${{inputs.registry-url != '' && inputs.registry-token != ''}}
       shell: bash
       run: |
-        yarn config set "npmRegistries[${{inputs.registry-url}}].npmAlwaysAuth" true
-        yarn config set "npmRegistries[${{inputs.registry-url}}].npmAuthToken" ${{inputs.registry-token}}
+        yarn config set "npmRegistries['${{inputs.registry-url}}'].npmAlwaysAuth" true
+        yarn config set "npmRegistries['${{inputs.registry-url}}'].npmAuthToken" ${{inputs.registry-token}}
 
     - name: Install dependencies (prod only)
       if: ${{inputs.install-deps == 'prod'}}
