@@ -1,0 +1,64 @@
+name: "Setup Codeartifact token"
+description: "Request a temporary codartifact token and configure the registry"
+inputs:
+  aws-access-key-id:
+    description: "AWS access key id"
+    required: false
+  aws-secret-access-key:
+    description: "AWS secret access key"
+    required: false
+  aws-region:
+    description: "AWS region"
+    required: false
+
+  codeartifact-domain:
+    description: Codeartifact domain
+    required: true
+  codeartifact-owner:
+    description: Codeartifact owner
+    required: true
+
+  registry-url:
+    description: Npm/Yarn registry URL (or false if you don't want configuration)
+    required: false
+
+outputs:
+  npm-token:
+    description: Codeartifact token
+    value: ${{steps.get-token.outputs.npm-token}}
+
+runs:
+  using: composite
+  steps:
+    - name: Configure AWS credentials
+      if: ${{inputs.aws-access-key-id != ''}}
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: ${{ inputs.aws-region }}
+
+    - name: Get Codeartifact Token
+      id: get-token
+      shell: bash
+      run: |
+        TOKEN=$(aws codeartifact get-authorization-token \
+        --domain ${{inputs.codeartifact-domain}} \
+        --domain-owner ${{inputs.codeartifact-owner}} \
+        --query authorizationToken \
+        --output text)
+
+        echo "npm-token=${TOKEN}" >> $GITHUB_OUTPUT
+
+    - name: Configure registry
+      if: ${{inputs.registry-url != 'false'}}
+      shell: bash
+      run: |
+        URL=${{inputs.registry-url}}
+
+        if [ -z "$URL" ]; then 
+          URL=$(yarn config get npmRegistryServer)
+        fi
+
+        yarn config set "npmRegistries['${URL}'].npmAlwaysAuth" true
+        yarn config set "npmRegistries['${URL}'].npmAuthToken" ${{steps.get-token.outputs.npm-token}}
