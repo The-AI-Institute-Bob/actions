@@ -48,6 +48,7 @@ runs:
         --query authorizationToken \
         --output text)
 
+        echo "::add-mask::${TOKEN}"
         echo "npm-token=${TOKEN}" >> $GITHUB_OUTPUT
 
     - name: Configure registry
