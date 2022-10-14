@@ -45,6 +45,7 @@ runs:
         TOKEN=$(aws codeartifact get-authorization-token \
         --domain ${{inputs.codeartifact-domain}} \
         --domain-owner ${{inputs.codeartifact-owner}} \
+        --duration-seconds 1200 \
         --query authorizationToken \
         --output text)
 
