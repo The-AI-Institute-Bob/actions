@@ -74,7 +74,7 @@ runs:
       working-directory: ${{inputs.working-directory}}
       shell: bash
       run: |
-        URL=${${{inputs.registry-url}}:-REGISTRY_URL}
+        URL=${'${{inputs.registry-url}}':-REGISTRY_URL}
 
         echo $REGISTRY_URL
         echo $URL
