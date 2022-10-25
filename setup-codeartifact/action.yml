@@ -70,7 +70,7 @@ runs:
         echo "REGISTRY_URL=${URL}" >> $GITHUB_ENV
 
     - name: Configure registry
-      if: ${{inputs.registry-url != 'false' && (inputs.registry-url != '' || env.registry_url != '')}}
+      if: ${{inputs.registry-url != 'false' && (inputs.registry-url != '' || env.REGISTRY_URL != '')}}
       working-directory: ${{inputs.working-directory}}
       shell: bash
       run: |
