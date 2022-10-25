@@ -14,6 +14,10 @@ inputs:
     description: "Install dependencies (no / install / prod) ? [default install]"
     required: false
     default: "install"
+  working_directory:
+    description: ""
+    required: false
+    default: "."
 
 runs:
   using: composite
@@ -25,22 +29,24 @@ runs:
 
     - name: Activate Yarn
       shell: bash
-      run: |
-        corepack enable
+      run: corepack enable
 
     - name: Configure registry
       if: ${{inputs.registry-url != '' && inputs.registry-token != ''}}
       shell: bash
+      working-directory: ${{inputs.working_directory}}
       run: |
         yarn config set "npmRegistries['${{inputs.registry-url}}'].npmAlwaysAuth" true
         yarn config set "npmRegistries['${{inputs.registry-url}}'].npmAuthToken" ${{inputs.registry-token}}
 
     - name: Install dependencies (prod only)
+      working-directory: ${{inputs.working_directory}}
       if: ${{inputs.install-deps == 'prod'}}
       shell: bash
       run: yarn workspaces focus --production
 
     - name: Install dependencies (prod only)
+      working-directory: ${{inputs.working_directory}}
       if: ${{inputs.install-deps == 'install'}}
       shell: bash
       run: yarn install --immutable

@@ -28,6 +28,11 @@ inputs:
     description: "AWS region"
     required: false
 
+  working_directory:
+    description: ""
+    required: false
+    default: "."
+
 outputs:
   npm-token:
     description: "Codeartifact token"
@@ -49,9 +54,11 @@ runs:
         aws-region: ${{inputs.aws-region}}
         codeartifact-domain: ${{inputs.codeartifact-domain}}
         codeartifact-owner: ${{inputs.codeartifact-owner}}
+        working-directory: ${{inputs.working_directory}}
 
     - name: Install dependencies
       if: ${{inputs.install != 'no'}}
+      working-directory: ${{inputs.working_directory}}
       shell: bash
       run: |
         if [ ${{inputs.install}} == 'dev' ]; then 

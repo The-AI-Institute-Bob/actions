@@ -22,6 +22,11 @@ inputs:
     description: Npm/Yarn registry URL (or false if you don't want configuration)
     required: false
 
+  working_directory:
+    description: ""
+    required: false
+    default: "."
+
 outputs:
   npm-token:
     description: Codeartifact token
@@ -54,6 +59,7 @@ runs:
 
     - name: Configure registry
       if: ${{inputs.registry-url != 'false'}}
+      working-directory: ${{inputs.working_directory}}
       shell: bash
       run: |
         URL=${{inputs.registry-url}}
