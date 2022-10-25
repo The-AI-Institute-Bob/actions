@@ -22,6 +22,10 @@ inputs:
     description: Npm/Yarn registry URL (or false if you don't want configuration)
     required: false
 
+  registry-get-cmd:
+    description: "Command that return the registry url (exemple: yarn config get npmRegistryServer)"
+    required: false
+
   working_directory:
     description: ""
     required: false
@@ -57,16 +61,20 @@ runs:
         echo "::add-mask::${TOKEN}"
         echo "npm-token=${TOKEN}" >> $GITHUB_OUTPUT
 
-    - name: Configure registry
-      if: ${{inputs.registry-url != 'false'}}
+    - name: Configure registry with url
+      if: ${{inputs.registry-url != 'false' && inputs.registry-url != ''}}
       working-directory: ${{inputs.working_directory}}
       shell: bash
       run: |
         URL=${{inputs.registry-url}}
+        yarn config set "npmRegistries['${URL}'].npmAlwaysAuth" true
+        yarn config set "npmRegistries['${URL}'].npmAuthToken" ${{steps.get-token.outputs.npm-token}}
 
-        if [ -z "$URL" ]; then 
-          URL=$(yarn config get npmRegistryServer)
-        fi
-
+    - name: Configure registry with command
+      if: ${{inputs.registry-url == '' && inputs.registry-get-cmd != ''}}
+      working-directory: ${{inputs.working_directory}}
+      shell: bash
+      run: |
+        URL=$(${{inputs.registry-get-cmd}})
         yarn config set "npmRegistries['${URL}'].npmAlwaysAuth" true
         yarn config set "npmRegistries['${URL}'].npmAuthToken" ${{steps.get-token.outputs.npm-token}}
