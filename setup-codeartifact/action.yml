@@ -65,7 +65,7 @@ runs:
       if: ${{inputs.registry-url == '' && inputs.registry-get-cmd != ''}}
       shell: bash
       run: |
-        URL=$(eval ${{inputs.registry-get-cmd}})
+        URL=$(eval "${{inputs.registry-get-cmd}}")
         echo $URL
         echo "REGISTRY_URL=${URL}" >> $GITHUB_ENV
 
