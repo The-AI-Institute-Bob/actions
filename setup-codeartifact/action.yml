@@ -64,7 +64,9 @@ runs:
       working-directory: ${{inputs.working-directory}}
       if: ${{inputs.registry-url == '' && inputs.registry-get-cmd != ''}}
       shell: bash
-      run: URL=${{inputs.registry-url}}
+      run: |
+        URL=$(eval ${{inputs.registry-get-cmd}})
+        echo $URL
         echo "REGISTRY_URL=${URL}" >> $GITHUB_ENV
 
     - name: Configure registry
@@ -72,8 +74,10 @@ runs:
       working-directory: ${{inputs.working-directory}}
       shell: bash
       run: |
-        URL=${{inputs.registry-url}}
-        URL=${URL:-REGISTRY_URL}
+        URL=${${{inputs.registry-url}}:-REGISTRY_URL}
+
+        echo $REGISTRY_URL
+        echo $URL
 
         yarn config set "npmRegistries['${URL}'].npmAlwaysAuth" true
         yarn config set "npmRegistries['${URL}'].npmAuthToken" ${{steps.get-token.outputs.npm-token}}
