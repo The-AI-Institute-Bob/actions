@@ -32,9 +32,9 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: codeartifact semantic-release
+    - name: "codeartifact semantic-release"
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         NPM_TOKEN: ${{ inputs.npm-token }}
-        run: semantic-release --debug
-        working-directory: ${{inputs.working-directory}}
+      run: semantic-release --debug
+      working-directory: ${{inputs.working-directory}}
