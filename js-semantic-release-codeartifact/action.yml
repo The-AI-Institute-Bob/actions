@@ -2,9 +2,6 @@ name: "Release js package to aws codeartifact"
 description: "release javascript package"
 
 inputs:
-  github-token:
-    description: "GITHUB token"
-    required: true
   npm-token:
     description: "NPM token"
     required: true
@@ -43,7 +40,7 @@ runs:
         AWS-SECRET-ACCESS-KEY: ${{ inputs.aws-secret-access-key }}
         AS-REGION: ${{ inputs.aws-region }}
 
-        GITHUB_TOKEN: ${{ inputs.github_token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ inputs.npm-token }}
       shell: bash
       run: semantic-release --debug
