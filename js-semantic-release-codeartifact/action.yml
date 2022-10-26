@@ -5,22 +5,25 @@ inputs:
   github-token:
     description: "GITHUB token"
     required: true
+  npm-token:
+    description: "NPM token"
+    required: true
   aws-access-key-id:
     description: "AWS access key id"
-    required: true
-  aws-secret-access-key:
+    required: false
+  Aws-secret-access-key:
     description: "AWS secret access key"
-    required: true
+    required: false
   aws-region:
     description: "AWS region"
-    required: true
+    required: false
 
   codeartifact-domain:
     description: Codeartifact domain
-    required: true
+    required: false
   codeartifact-owner:
     description: Codeartifact owner
-    required: true
+    required: false
   working-directory:
     description: ""
     required: false
