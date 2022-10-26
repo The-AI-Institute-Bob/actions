@@ -1,0 +1,40 @@
+name: "Release js package to aws codeartifact"
+description: "release javascript package"
+
+inputs:
+  github-token:
+    description: "GITHUB token"
+    required: true
+  aws-access-key-id:
+    description: "AWS access key id"
+    required: true
+  aws-secret-access-key:
+    description: "AWS secret access key"
+    required: true
+  aws-region:
+    description: "AWS region"
+    required: true
+
+  codeartifact-domain:
+    description: Codeartifact domain
+    required: true
+  codeartifact-owner:
+    description: Codeartifact owner
+    required: true
+  working-directory:
+    description: ""
+    required: false
+    default: "."
+
+runs:
+  using: composite
+  steps:
+    - name: codeartifact semantic-release
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        Aws_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
+        AWS_REGION: ${{ inputs.aws-region }}
+        NPM_TOKEN: ${{ inputs.npm-token }}
+        run: semantic-release --debug
+        working-directory: ${{inputs.working-directory}}
