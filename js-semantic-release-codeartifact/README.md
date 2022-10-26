@@ -6,4 +6,5 @@ This action relase the package in the working-directory to codeartifact the acti
 
 | name                    | description               | required |
 | ----------------------- | ------------------------- | :------: |
+| `npm-token`             | The Codeartifact token    |   [x]    |
 | `working_directory`     | the working directory     |          |
