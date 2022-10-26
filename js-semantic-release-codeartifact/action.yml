@@ -34,13 +34,17 @@ runs:
   steps:
     - name: Install semantic-release
       shell: bash
-      run: yarn add --dev semantic-release semantic-release-codeartifact @semantic-release/exec
+      run: npm install -g semantic-release  @semantic-release/exec
       working-directory: ${{inputs.working-directory}}
 
     - name: "codeartifact semantic-release"
       env:
+        AWS-ACCESS-KEY-ID: ${{ inputs.aws-access-key-id }}
+        AWS-SECRET-ACCESS-KEY: ${{ inputs.aws-secret-access-key }}
+        AS-REGION: ${{ inputs.aws-region }}
+
         GITHUB_TOKEN: ${{ inputs.github_token }}
         NPM_TOKEN: ${{ inputs.npm-token }}
       shell: bash
-      run: yarn semantic-release --debug
+      run: semantic-release --debug
       working-directory: ${{inputs.working-directory}}
