@@ -35,9 +35,6 @@ runs:
     - name: codeartifact semantic-release
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
-        Aws_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
-        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
-        AWS_REGION: ${{ inputs.aws-region }}
         NPM_TOKEN: ${{ inputs.npm-token }}
         run: semantic-release --debug
         working-directory: ${{inputs.working-directory}}
