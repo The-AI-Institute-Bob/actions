@@ -39,7 +39,6 @@ runs:
         AWS-ACCESS-KEY-ID: ${{ inputs.aws-access-key-id }}
         AWS-SECRET-ACCESS-KEY: ${{ inputs.aws-secret-access-key }}
         AS-REGION: ${{ inputs.aws-region }}
-
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ inputs.npm-token }}
       shell: bash
