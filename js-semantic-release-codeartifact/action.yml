@@ -35,6 +35,7 @@ runs:
     - name: Install semantic-release
       shell: bash
       run: yarn add --dev semantic-release semantic-release-codeartifact @semantic-release/exec
+      working-directory: ${{inputs.working-directory}}
 
     - name: "codeartifact semantic-release"
       env:
