@@ -32,10 +32,14 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Install semantic-release
+      shell: bash
+      run: yarn add --dev semantic-release semantic-release-codeartifact @semantic-release/exec
+
     - name: "codeartifact semantic-release"
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         NPM_TOKEN: ${{ inputs.npm-token }}
       shell: bash
-      run: semantic-release --debug
+      run: yarn semantic-release --debug
       working-directory: ${{inputs.working-directory}}
