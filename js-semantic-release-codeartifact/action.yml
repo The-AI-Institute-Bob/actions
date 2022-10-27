@@ -15,7 +15,7 @@ runs:
   steps:
     - name: Install semantic-release
       shell: bash
-      run: npm install -g semantic-release  @semantic-release/exec
+      run: npm install -g semantic-release  @semantic-release/exec semantic-release-slack-bot
       working-directory: ${{inputs.working-directory}}
 
     - name: "codeartifact semantic-release"
