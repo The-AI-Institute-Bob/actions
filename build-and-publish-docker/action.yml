@@ -1,0 +1,26 @@
+name: "Build publish docker"
+description: "Build and publish docker to aws ECR"
+
+inputs:
+  ecr-registry:
+    description: "AWS ECR registry"
+    required: true
+  ecr-repository:
+    description: "AWS Repository name"
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Build, tag, and push the image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ inputs.ecr-registry }}
+        ECR_REPOSITORY: ${{ inputs.ecr-repository }}
+      shell: bash
+      run: |
+        export TAG=`git describe --tags --abbrev=0`
+        export SEMVERSION=${TAG:-"0.0.0"}
+        docker build -t "$ECR_REGISTRY/${ECR_REPOSITORY}:${GITHUB_SHA}" -t "$ECR_REGISTRY/${ECR_REPOSITORY}:latest" -t "$ECR_REGISTRY/${ECR_REPOSITORY}:${SEMVERSION}" .
+        echo "Pushing image to ECR..."
+        docker push --all-tags $ECR_REGISTRY/$ECR_REPOSITORY
+      working-directory: ${{ inputs.working-directory }}
