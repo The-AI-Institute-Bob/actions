@@ -28,6 +28,9 @@ outputs:
   npm-token:
     description: "Codeartifact token"
     value: ${{steps.codeartifact.outputs.TOKEN}}
+  ecr-registry:
+    description: "AWS ECR registry"
+    value: ${{steps.ecr.outputs.registry}}
 
 runs:
   using: composite
