@@ -39,16 +39,16 @@ runs:
       with:
         payload: |
          {
-         "text": "docker container ${{ inputs.ecr-repository }} has been built: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
-         "blocks": [
-         {
-         "type": "section",
-         "text": {
-           "type": "mrkdwn",
-           "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-           }
+           "text": "docker container ${{ inputs.ecr-repository }} has been built: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+            "blocks": [
+               {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                }
+               }
+            ]
          }
-         ]
-       }
-     env:
-       SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
