@@ -25,8 +25,10 @@ runs:
         ECR_REGISTRY: ${{ inputs.ecr-registry }}
         ECR_REPOSITORY: ${{ inputs.ecr-repository }}
         NPM_TOKEN: ${{ inputs.npm-token }}
+        SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
       shell: bash
       run: |
+        echo "SLACK_WEBHOOK_URL $SLACK_WEBHOOK_URL"
         export TAG=`git describe --tags --abbrev=0`
         export SEMVERSION=${TAG:-"0.0.0"}
         docker build --build-arg NPM_TOKEN=$NPM_TOKEN -t "$ECR_REGISTRY/${ECR_REPOSITORY}:${GITHUB_SHA}" -t "$ECR_REGISTRY/${ECR_REPOSITORY}:latest" -t "$ECR_REGISTRY/${ECR_REPOSITORY}:${SEMVERSION}" .
