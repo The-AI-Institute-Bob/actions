@@ -12,10 +12,10 @@ inputs:
     description: "NPM token"
     required: false
     default: ""
- slack-webhook-url:
-   description: "Slack Web hook url"
-   required: slack
-   default: ""
+  slack-webhook-url:
+    description: "Slack Web hook url"
+    required: slack
+    default: ""
 runs:
   using: composite
   steps:
