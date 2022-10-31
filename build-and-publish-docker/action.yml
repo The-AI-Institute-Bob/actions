@@ -12,7 +12,7 @@ inputs:
     description: "NPM token"
     required: false
     default: ""
- slack-webhook_url:
+ slack-webhook-url:
    description: "Slack Web hook url"
    required: slack
    default: ""
@@ -34,7 +34,7 @@ runs:
         docker push --all-tags $ECR_REGISTRY/$ECR_REPOSITORY
       working-directory: ${{ inputs.working-directory }}
     - name: Slack
-      if: {{inputs.slack-webhook != ""}}
+      if: {{inputs.slack-webhook-url != ""}}
       uses: slackapi/slack-github-action@v1.23.0
       with:
         payload: |
@@ -51,4 +51,4 @@ runs:
          ]
        }
      env:
-       SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook_url }}
+       SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
