@@ -12,6 +12,10 @@ inputs:
     description: "NPM token"
     required: false
     default: ""
+ slack-webhook_url:
+   description: "Slack Web hook url"
+   required: slack
+   default: ""
 runs:
   using: composite
   steps:
@@ -29,3 +33,22 @@ runs:
         echo "Pushing image to ECR..."
         docker push --all-tags $ECR_REGISTRY/$ECR_REPOSITORY
       working-directory: ${{ inputs.working-directory }}
+    - name: Slack
+      if: {{inputs.slack-webhook != ""}}
+      uses: slackapi/slack-github-action@v1.23.0
+      with:
+        payload: |
+         {
+         "text": "docker container ${{ inputs.ecr-repository }} has been built: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+         "blocks": [
+         {
+         "type": "section",
+         "text": {
+           "type": "mrkdwn",
+           "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+           }
+         }
+         ]
+       }
+     env:
+       SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook_url }}
