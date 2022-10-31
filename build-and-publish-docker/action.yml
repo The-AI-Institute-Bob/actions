@@ -34,7 +34,7 @@ runs:
         docker push --all-tags $ECR_REGISTRY/$ECR_REPOSITORY
       working-directory: ${{ inputs.working-directory }}
     - name: Slack
-      if: {{inputs.slack-webhook-url != ""}}
+      if: ${{inputs.slack-webhook-url != ""}}
       uses: slackapi/slack-github-action@v1.23.0
       with:
         payload: |
